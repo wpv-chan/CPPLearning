@@ -225,7 +225,9 @@
   注意：
    
     * 指针不知向内存的0号单元，若指针变量值为0或者NULL，则表示空指针
+  
     * 地址值与整型数值不同
+
     * 无论何种类型的指针都占用4个字节的内存空间
   
 
@@ -250,11 +252,13 @@
 * 访问数组的方式
   
   * 下标形式
+  
   * 指针形式
 
 * 两种类型数组
 
   * 全局数组和静态数组：在静态储存区中被创建
+  
   * 局部变量：在栈上被创建
 
 * 数据名对应一块内存，其地址与容量在其生命周期内保持不变，只有数组的内容可以改变
@@ -318,9 +322,196 @@
 
 ## <span id="2">2 指针与函数</span>
 
+### 2.1 参数的传递方式
+
+* 基本类型的变量作函数形参
+  
+  交换变量x与y的值，采用基本类型的变量做函数形参
+  <pre name = "code" class = "c++">
+  void swap(int a, int b) {
+    int t;
+    t = a;
+    a = b;
+    b = t;
+  }
+  </pre>
+  这是单向的值传递，形参的变化不会影响实参
+
+* 引用类型作为函数形参
+
+  交换变量x与y的值，采用引用类型做函数的形参
+  <pre name = "code" class = "c++">
+  void swap(int& a, int& b) {
+    int t;
+    t = a;
+    a = b;
+    b = t;
+  }
+  </pre>
+  通过定义被调用中的参数为引用类型，将主调函数的值改变
+
+* 指针类型作为函数形参
+
+  交换变量x与y的值，采用指针类型做函数形参
+  <pre name = "code" class = "c++">
+  void swap(int* px, int* py) {
+    int t;
+    t = *px;
+    *px = *py;
+    *py = t;
+  }
+  </pre>
+  通过定义被调用函数中的参数为指针类型，通过间接存取将主调函数的值改变
+
+  注意：指针类型做参数形参的另一种形式是数组名做函数参数
+
+### 2.2 返回指针的函数及指向函数的指针
+
+* 指针型函数
+  
+  一个函数的返回值是某种数据类型的地址值就是指针型函数
+  <pre name = "code" class = "c++">
+  int* function(int x, int y) {
+    return x+y;
+  }
+  </pre>
+
+* 函数指针
+  
+  函数的入口地址。函数指针变量就是指向函数入口地址的变量。
+  <pre name = "code" class = "c++">
+  int (*fun)(int , int);
+  int max(int x, int y) {
+    return x > y?x : y;
+  }
+  fun = max;
+  </pre>
+  用法示例
+  <pre name = "code" class = "c++">
+  int process(int x, int y, int (*fun)(int, int)) {
+    return fun(x, y);
+  }
+  </pre>
+
+### 2.3 指针数组与指向指针的指针
+
+* 指针数组
+  
+  一个数组里面所有的元素都是指针变量称为指针数组
+
+* 指针数组与数组指针的本质区别就是*与[]的优先级顺序不同
+
+  <pre name = "code" class = "c++">
+  int (*p)[M]; //p是一个数组指针，一个行指针，指向拥有M个元素的一维数组
+  int* p[M]; //p是一个指针数组，包含有M个指针
+  </pre>
+
+* main函数的参数
+  
+  在main()函数头部声明的格式为
+  <pre name = "code" class = "c++">
+  int main(int argc, char* argv[])
+  int main(int argc, char** argv)
+  //argc表示命令行中字符串的个数
+  //argv[]指向命令行中的各个字符串
+  </pre>
+  举个栗子，通过命令行参数计算输入数据的和
+  <pre name = "code" class = "c++">
+  int main(int argc, char* argv[]) {
+    int sum, i;
+    cout << "Command name:" << argv[0] << endl;
+    for(sum = 0, i = 1; i < argc; i++) {
+      sum += atoi(argv[i]);
+    }
+    cout << "Sum is:" << sum << endl;
+  }
+  </pre>
+
+* 指向指针的指针
+  
+  举个栗子
+  <pre name = "code" class = "c++">
+  int x, *p = &x, **pp = p;
+  </pre>
+
+### 2.4 内存的动态分配与释放
+
+* 变量存储空间的分配是系统完成的，不需用户干预
+  
+  * 静态变量：编译时分配空间
+  
+  * 动态变量：系统运动时分配空间
+
+* 程序动态申请空间是由用户在编程时安排的
+* 申请多少空间由运行时情况而定，一般通过指针访问空间
+* new用于动态申请储存空间，delete用于释放new申请的存储空间
+  <pre name = "code" class "c++">
+  //分配单个元素空间
+  int* iptr;
+  iptr = new int;
+  *iptr = 25;
+  //也可以这样
+  iptr = new int(25);
+  delete iptr;
+  //分配一片连续的空间
+  int* a;
+  a = new int[100];
+  delete []a;
+  </pre>
+  注意：如果函数的参数是一个指针，不要用指针去申请动态内存，否则会因为申请的空间无法释放而造成内存泄漏
+
+### 2.5 void 和 const 修饰指针变量
+
+#### 2.5.1 void修饰指针变量
+
+* void修饰指针
+  
+  void修饰指针代表是一种不确定类型的指针
+
+* 任何类型的指针都可以直接赋给它，无需类型转换
+
+  <pre name = "code" class = "c++">
+  void* p1;
+  int* p2;
+  p1 = p2;
+  </pre>
+
+* 不能对void指针进行算数操作
+
+#### 2.5.2 const修饰指针变量
+  
+* 指向常量的指针
+  
+  可以改变指针所指的空间，但不可以通过指针改变现在所指的内容
+
+  <pre name = "code" class = "c++">
+  int i = 6;
+  const int* p1 = &i;
+  const int m = 16;
+  *p1 = 16; //wrong
+  p1 = &m; //true
+  </pre>
+
+* 常量指针
+
+  可以改变指针所指向空间中的内容，但是不能改变指针的指向
+
+  <pre name = "code" class = "c++">
+  char stringA[10] = "abcd", stringB[10] = "xyz";
+  char* const sp = atringA;
+  sp = stringB; //wrong
+  *(sp+1) = 't'; //true
+  </pre>
+
+* 指向常量的指针常量
+
+  既不可以修改指针所指的内容又不可改变指针的指向
+
 ---
 
 ## <span id="3">3 结构体与列表</span>
+
+
 
 ---
 
