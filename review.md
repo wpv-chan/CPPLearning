@@ -511,7 +511,147 @@
 
 ## <span id="3">3 结构体与列表</span>
 
+### 3.1 结构体的建立
 
+* 结构体就是通过定义一种数据类型，把不同的数据作为一个整体来处理
+
+* 结构体是一种由程序员创建的抽象数据类型
+
+* 先定义结构体
+  <pre name = "code" class = "c++">
+  struct<结构体名称> {
+    <成员列表>
+  }; //这里不要忘记了;号
+  </pre>
+
+* 再定义变量
+  <pre name = "code" class = "c++">
+  student John, Mary;
+  struct student John, Mary;
+  </pre>
+
+* 也可以使用无结构体名构造一次性结构体
+  <pre name = "code" class = "c++">
+  struct {
+    int ID;
+    char name[10];
+  }John, Mary;
+  </pre>
+
+* 初始化结构体类型的变量
+
+  用{}括起来的值对结构体变量进行初始化，例如
+    <pre name = "code" class = "c++">
+    student John = {666, "Joe"};
+    </pre>
+
+  用同类型的结构体变量初始化另外一个结构体变量
+    <pre name = "code" class = "c++">
+    student Merry = John;
+    </pre>
+
+* 结构体类型变量及其成员的引用
+
+  引用结构体变量的成员
+  <pre name = "code" class = "c++">
+  John.ID = 2333;
+  </pre>
+
+  整体引用结构体变量
+  <pre name = "code" class = "c++">
+  student John = {...};
+  student Merry;
+  Merry = John;
+  </pre>
+
+  注意
+
+  * 不能将结构体作为一个整体进行输入或者输出
+
+  * 结构体变量可以用作函数的参数，属于按值传递
+
+  * 函数可以返回一个结构体变量
+
+### 3.2 结构体的应用
+
+* 使用结构体变量作为函数参数的效率较低，因为结构体作为形参需要赋值
+
+* 结构体数组与指针
+
+  定义结构体数组和初始化
+  <pre name = "code" class = "c++">
+  student studentList[4];
+  student studentList[4] = {{...}, {...}, {...}, {...}};
+  </pre>
+
+  使用结构体数组
+  <pre name = "code" class = "c++">
+  //引用元素
+  for(int i = 0; i < 4; i++) {
+    cout << studentList[i].name;
+  }
+  //指针
+  student *ps;
+  ps = stud;
+  ps++;
+  </pre>
+
+### 3.3 typedef 定义类型名
+
+* 语法格式
+  <pre name = "code" class = "c++">
+  tyoedef <原类型名> <自定义的类型名>
+  </pre>
+
+  栗子：
+  <pre name = "code" class = "c++">
+  typedef char NAME[100];
+  NAME Joe;
+  //等价于下面
+  char Joe[100];
+  </pre>
+
+* 注意typedef与#define的不同
+
+  * 关键字typedef在编译阶段有效，具有类型检查的功能
+
+  * #define是宏定义，发生在预处理阶段，只会进行简单的字符替换，不做任何检查
+
+  * #define没有作用域的限制，只要是之前预定义过的宏，在以后的程序中都可以使用
+
+  * typedef则具有自己的作用域
+
+* 用typedef定义新类型名
+  
+  * typedef只能用于为已知数据类型名定义新的类型名，并没有增加新的数据类型
+
+  * typedef用于软件移植
+  
+    比如定义一个叫REAL的浮点类型，在目标平台一上，让它表示最高精度的类型为
+    <pre name = "code" class = "c++">
+    typedef long double REAL;
+    </pre>
+
+    而在不支持long double的第二平台上，改为
+    <pre name = "code" class = "c++">
+    typedef double REAL;
+    </pre>
+
+    在连double都不支持的平台上，改为
+    <pre name = "code" class = "c++">
+    typedef float REAL;
+    </pre>
+
+### 3.4 链表的建立
+
+* 链表的引入
+
+  * 数据空间是连续的
+  
+  * 实际应用无法确定数组的大小
+  * 定义足够大————空间浪费
+
+* 单向链表
 
 ---
 
