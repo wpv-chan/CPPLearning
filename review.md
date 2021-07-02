@@ -173,10 +173,147 @@
 
 * string对象的初始化
   <pre name = "code" class = "c++">
-  string name("LiSA");
-  string singer(name);
-  
+  string test1;    //空串
+  string test2 = "内容"; //使用=
+  string test3("内容");   //使用引用字符数组作为参数传给构造函数
+  string test4(test2); //用一个string初始化另一而string
+  string test5(test2,pos,num); //从test2中的第pos个位置开始，拷贝个数为num个字符
+  string test6 = test2 + "内容" + test3 //混合初始化
+  string test7 = test2.substr(pos,num); //从test2中的第pos个位置开始，拷贝个数为num个字符
+  string test8 = test2.substr(); //参数列表为空则会拷贝test2的整个对象（复制test2的简便方法）
+  string test9(num,ch); //拷贝num个字符型ch到test9
   </pre>
+
+* string类型常用的操作符
+  <pre name = "code" class = "c++">
+  =, assign() //赋以新值
+  swap() //交换两个字符串的内容
+  +=, append(), push_back() //在尾部添加字符
+  insert() //插入字符
+  erase() //删除字符
+  clear() //删除全部字符
+  replace() //替换字符
+  + //串联字符串
+  ==, !=, <, <=, >, >=, compare() //比较字符串
+  size(), length() //返回字符数量
+  max_size() //返回字符的可能最大个数
+  empty() //判断字符串是否为空
+  capacity() //返回重新分配之前的字符容量
+  reserve() //保留一定量内存以容纳一定数量的字符
+  [ ], at() //存取单一字符
+  >>,getline() //从stream读取某值
+  << //将谋值写入stream
+  copy() //将某值赋值为一个C_string
+  c_str() //将内容以C_string返回
+  data() //将内容以字符数组形式返回
+  substr() //返回某个子字符串
+  find() //查找字符
+  begin() end() //提供类似STL的迭代器支持
+  rbegin() rend() //逆向迭代器
+  get_allocator() //返回配置器
+  </pre>
+
+### 1.3 指针的概念、指针变量的定义和使用
+
+* 指针变量就是存放地址的变量
+  
+* 定义指针变量
+  例如：
+  <pre name = "code" class = "c++">
+  int* pInt;
+  </pre>
+  注意：
+   
+    * 指针不知向内存的0号单元，若指针变量值为0或者NULL，则表示空指针
+    * 地址值与整型数值不同
+    * 无论何种类型的指针都占用4个字节的内存空间
+  
+
+* 运算符*与&
+  
+  *：通过指针访问所指变量的数值
+
+  &：访问指针内储存的地址
+
+* 引用指针变量
+  <pre name = "code" class = "c++">
+  int x = 30, y = 90;
+  int *p1 = &x, *p2 = &y, t;
+  t = *p1;
+  *p1 = *p2;
+  *p2 = t;
+  </pre>
+  上述例子实现了p1与p2指向变量的值的交换
+
+### 1.4 指针与数组
+
+* 访问数组的方式
+  
+  * 下标形式
+  * 指针形式
+
+* 两种类型数组
+
+  * 全局数组和静态数组：在静态储存区中被创建
+  * 局部变量：在栈上被创建
+
+* 数据名对应一块内存，其地址与容量在其生命周期内保持不变，只有数组的内容可以改变
+* 指针可以指向任意类型的内存块，其特征是“可变”
+* 指向一维数组元素的指针
+  
+  数组名代表该数组的开始地址，数组名即时一个指针常量，例如
+  <pre name = "code" class = "c++">
+  int a[10], *p;
+  p = a;
+  p = &a[0];//二者等价
+  </pre>
+
+* 指针比较
+
+  指向同一个数组的两个指针可以进行比较
+
+  逆序存放的代码
+  <pre name = "code" class = "c++">
+  for(p1 = set, p2 = set+length-1; p1 < p2; p1++, p2--) {
+    t = *p1;
+    *p1 = *p2;
+    *p2 = t;
+  }
+  </pre>
+
+* 指针变量之间的加法无意义
+
+* 指向二维数组元素的指针
+  
+  二维数组元素a[i][j]的表示
+  <pre name = "code" class = "c++">
+  //表示地址
+  &a[i][j]
+  a[i]+j
+  *(a+i)+j
+  
+  //表示数值
+  a[i][j]
+  \*(a[i]+j)
+  \*(\*(a+i)+j)
+  (\*(a+i))[j]
+  </pre>
+  注意：a[0] == a[0][0]
+
+  一个通用的二维数组的输出例子
+  <pre name = "code" class = "c++">
+  void Print(int* p, int row, int col) {
+    int i;
+    for(i = 0; i < row*col; i++, p++) {
+      if(i % col == 0) {
+        cout << end;
+      }
+      cout << setw(4) << *p;
+    }
+    cout << endl;
+  }
+  </pre>
+
 ---
 
 ## <span id="2">2 指针与函数</span>
