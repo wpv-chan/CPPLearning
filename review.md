@@ -1794,7 +1794,7 @@ void main()
 * 理解：拷贝构造函数的参数一定是个引用，防止拷贝构造函数被调用后又实例化了一个对象，再次调用了拷贝构造函数，形成无限递归
 * 如果函数的返回值是对象，函数执行结束时，将调用拷贝构造函数对无名临时对象初始化
 
-### 6.1 赋值运算符重载与this指针
+### 6.7 赋值运算符重载与this指针
 
 * 赋值运算符重载
 
@@ -1861,7 +1861,7 @@ void main()
     this->age = age; 
   }
   ```
-### 6.2 双目运算符重载
+### 6.8 双目运算符重载
   * 任何一个双目算术运算符 A 被重载以后，当执行二元运算时：
   
     Obj1 A Obj2 完全等价于：Obj1.operator A( Obj2 )
@@ -1885,7 +1885,7 @@ void main()
     }
     ```
 
-### 6.3 单目运算符重载
+### 6.9 单目运算符重载
   * 单目算术运算符有 ++、--、!、~（按位取反）等
 
     例如：对++运算符进行重载
@@ -1912,7 +1912,7 @@ void main()
     }
     ```
 
-  ### 6.4 关系运算符重载
+  ### 6.10 关系运算符重载
   * 关系算术运算符有 >、<、<=、>=、==、!= 等
 
     重载关系运算符，实现两个对象的比较，其中关系运算符函数要返回一个布尔值（true或false）:
@@ -1935,7 +1935,7 @@ void main()
         return false; 
     }
     ```
-  ### 6.5 流操作符重载
+  ### 6.11 流操作符重载
   * 流操作符有 >>、<< 等
 
     由于cout本身不支持类对象的处理，如果要让它同样能打印类对象，必须得重载操作符<<。
@@ -1970,7 +1970,7 @@ void main()
 
     （4）以（2）的方式，执行表达式中的cout << endl；
 
-  ### 6.6 类型转换运算符重载
+  ### 6.12 类型转换运算符重载
   * 类型转换运算符()
   
     对于一个对象，通过重载类型转换函数，可实现类型转换功能。
@@ -2006,7 +2006,7 @@ void main()
     ```
     注意：对象到整形、浮点型的类型转换没有返回值
     
-   ### 6.7 下标运算符[]重载
+   ### 6.13 下标运算符[]重载
   
   * 下标操作符 [ ] 通常用于访问数组元素。重载该运算符用于增强操作 C++ 数组的功能。
 
@@ -2054,6 +2054,551 @@ void main()
 ---
 
 ## <span id="7">7 类的继承、多态、虚函数</span>
+### 7.1 继承
+
+  * 继承易于扩充现有类以满足新的应用。将已有的类称之为父类，也称基类；将新产生的类称为子类，也称为导出类或派生类。
+
+    导出类不做任何改变地继承了基类中的所有变量和函数（构造函数和析构函数除外），并且还可以增加新的数据成员和函数，从而使导出类比基类更为特殊化。
+    ```cpp
+    class Grade 
+    { 
+      char letter; 
+      float score; 
+    public: 
+      void setScore(float s); 
+    };
+    ```
+    Test 子类公有继承 Grade父类
+    ```cpp
+    class Test : public Grade
+    { 
+      int numQuestions; 
+    public: 
+      Test( int, int );
+    };
+    ```
+    父类中的公有成员在子类中仍是公有的，它们可以和子类中的公有成员一样被访问。但反过来是错误的，基类对象或基类中的某个函数不能调用子类中的函数。
+### 7.2 保护成员和类的访问
+  * 基类中的保护成员和私有成员比较类似，唯一的区别是：子类不可访问基类中的私有成员，但可访问基类中的保护成员。
+
+    在公有继承或保护继承的情况下，子类能访问基类的protected成员。
+
+    不同继承方式，基类成员在子类中的表现：
+    |继承方式|基类成员在子类中的表现|
+    |:-:|:-|
+    |private|1．基类的私有成员在子类中不可访问；<br>2．基类的保护成员变成了子类中的私有成员；<br>3．基类的公有成员变成了子类中的私有成员。|
+    |protected|1．基类的私有成员在子类中不可访问；<br>2．基类的保护成员变成了子类中的保护成员；<br>3．基类的公有成员变成了子类中的保护成员。|
+    |public|1．基类的私有成员在子类中不可访问；<br>2．基类的保护成员变成了子类中的保护成员；<br>3．基类的公有成员变成了子类中的公有成员。|
+    
+    实例化表现：
+    |基类成员在基类中的表现|继承方式|基类成员在子类中的表现|
+    |:-|:-:|:-|
+    |private: x<br>protected: y<br>public: z|private继承|x is inaccessible<br>private: y<br>private: z| 
+    |private: x<br>protected: y<br>public: z|protected继承|x is inaccessible<br>protected: y<br>protected: z| 
+    |private: x<br>protected: y<br>public: z|public继承|x is inaccessible<br>protected: y<br>public: z| 
+
+  * 注意：
+
+    （1）如果省略了继承修饰符，那么就是私有继承，如下：
+    ```cpp
+    class Test : Grade
+    ```
+    （2）不要将继承修饰符与成员的访问修饰符相混淆：
+
+      * 继承修饰符是为了限定父类成员在子类中的表现 
+      * 成员访问修饰符是规定类外语句能否访问类中的成员
+### 7.3 保护成员和类的访问
+   * 继承下的构造函数和析构函数
+    
+     当基类和子类都有构造函数时，如果定义一个子类对象，那么首先要调用基类的构造函数，然后再调用子类的构造函数；
+
+     析构函数的调用次序与此相反，即先调用子类的析构函数，然后再调用基类的析构函数。
+
+     例子：
+     ```cpp
+      class BaseDemo 
+      { 
+      public: 
+        BaseDemo( ) { cout << "In BaseDemo constructor.\n"; }
+        ~BaseDemo( ) { cout << "In BaseDemo destructor.\n"; } 
+      };
+      class DerivedDemo : public BaseDemo 
+      { 
+        public:
+        DerivedDemo( ){ cout << "In DerivedDemo constructor.\n"; } 
+        ~DerivedDemo( )
+        { cout << "In DerivedDemo destructor.\n"; } 
+      };
+     ```
+   * 向父类的构造函数传参数
+
+      如果基类和子类都有缺省的构造函数，它们的调用是自动完成的，这是一种隐式调用。
+
+      如果基类的构造函数带有参数，那么必须让子类的构造函数显式调用基类的构造函数，并且向基类构造函数传递适当的参数。
+    
+      实例：
+      ```cpp
+      class Rectangle 
+      { 
+      protected: 
+        float width , length, area; 
+      public: 
+        Rectangle( ) { width = length = area = 0.0f ; } 
+        Rectangle ( float w, float l ) 
+        { 
+          width = w; 
+          length = l; 
+          area = width * length; 
+        } 
+      };
+      //子类Cube公有继承基类Rectangle
+      class Cube : public Rectangle 
+      { 
+      protected: 
+        float height, volume; 
+      public: 
+        Cube(float, float, float); 
+      };
+      //初始化列表
+      Cube::Cube(float w, float l, float h) : Rectangle(w, l) 
+      { 
+        height = h ; 
+        volume = area * height ; 
+      }
+      ```
+### 7.4 初始化列表的作用
+  * 初始化列表的作用 
+
+    如果类之间具有继承关系，子类必须在其初始化列表中调用基类的构造函数。如：
+    ```cpp
+    class Base 
+    { 
+      Base( int x );
+    }; 
+    class Derived : public Base 
+    { 
+      Derived(int x, int y): Base(x) 
+      { /* … */ } 
+    };
+    ```
+  * 类中的const常量只能在初始化列表中进行初始化，而不能在函数内用赋值的方式初始化。如：
+    ```cpp
+    class Base 
+    { 
+      const int SIZE ; 
+      Base(int size) : SIZE(size) 
+      { /* … */ }
+    }; 
+
+    Base one(100);
+    ```
+
+  * 对象类型的成员的初始化放在初始化列表中，则效率较高，反之较低。基本类型变量的初始化可以在初始化列表中，也可在构造函数中，效率上没区别。如：
+    ```cpp
+    class Base
+    { 
+      Base( ); 
+      Base(const Base &other); 
+    }；
+    class Derived
+    {
+      Base B_Member;
+    public: Derived(const Base &a); 
+    };
+    ```
+
+    构造函数的实现：
+    ```cpp
+    Derived::Derived(const Base & b ) :B_Member(b)
+    { /* … */ }
+    ```
+    也可这样实现，但效率较低：
+    ```cpp
+    Derived::Derived(const Base &b) 
+    { B_Member = b; }
+    ```
+### 7.5 覆盖基类的函数成员
+  
+  * 覆盖与重载的区别
+
+      重载的特点：
+    
+      * 重载表现为有多个函数，它们的 名字相同，但参数不全相同；
+
+      * 重载可以出现在同一个类中，也可出现在具有继承关系的父类与子类中；
+
+      * 重载也可表现为外部函数的形式。
+      
+        例如：
+        ```cpp
+        class Base
+        {
+        public: 
+          int fun(int x) 
+          {
+            cout<<x<<”n”;
+          } 
+        }；
+        class Derived: public Base 
+        {
+        public: 
+          int fun(int x,int y) 
+          {
+            cout<<x+y<<”\n”<<endl;
+          } 
+        };
+        ```
+      覆盖的特点：
+      * 覆盖一定出现在具有继承关系的基类和子类之间； 
+
+      * 覆盖除了要求函数名完全相同，还要求相应的参数个数和类型也完全相同； 
+      
+      * 当进行函数调用时，子类对象所调用 的是子类中定义的函数； 
+      
+      * 覆盖是C++多态性的部分体现。
+        ```cpp
+        class Base
+        { 
+        public: 
+          int fun(int x) 
+          {
+            cout<<x<<”n”;
+          } 
+        }；
+        class Derived: public Base 
+        { 
+        public: 
+          int fun(int x) 
+          {
+            cout<<x+y<<”\n”;
+          } 
+        };
+        ```
+### 7.6 虚函数与纯虚函数
+* 虚函数
+
+  函数覆盖体现了一定的多态性。但是，简单的函数覆盖并不能称为真正的多态性。
+
+  不支持多态性的语言不是一个正在的OOP语言。
+
+  错误实例：
+  ```cpp 
+  class MileDist
+  {
+  protected:
+      float miles;
+  public:
+      void setDist(float d) { miles = d; }
+      float getDist() { return miles; }
+      float square()
+      {
+          return getDist() * getDist();//谁的？
+      }
+  };
+  class FeetDist : public MileDist 
+  { 
+  protected: 
+      float feet; 
+  public: 
+      void setDist(float); 
+      float getDist() { return feet; }
+      float getMiles() { return miles; } 
+  }; 
+  void FeetDist::setDist(float ft)
+  { 
+      feet = ft; 
+      MileDist::setDist(feet / 5280); 
+  }
+  void main() 
+  { 
+      FeetDist feet; 
+      float ft; 
+      cout << "请输入以英尺为单位的距离：";
+      cin >> ft; 
+      feet.setDist(ft); 
+      cout << feet.getDist() << " 英尺等于 "; 
+      cout << feet.getMiles() << " 英里\n"; 
+      cout << feet.getDist() << " 平方等于 "; 
+      cout << feet.square() << " \n"; 
+  }
+  ```
+  错误的原因：
+  C++编译器在缺省情况下，对函数成员的调用实施的是静态连编（也称静态绑定）。
+
+  注意：父类中调用函数是提前确定的，没有根据当前对象类型确定。
+
+  OOP: 覆盖和重载不能体现真正的多态性，只有虚函数才是多态性的表现。不支持多态 性的语言，就不能称为OOP。
+  ```cpp
+  class MileDist 
+  { 
+  protected: 
+      float miles; 
+  public: 
+      void setDist(float d) { miles = d; } 
+      virtual float getDist() { return miles; }
+      float square() { return getDist() * getDist(); } 
+  };
+  ```
+* 纯虚函数
+
+  纯虚函数是在基类中声明的虚函数，没有函数体，要求继承基类的子类必须覆盖它。 
+   
+  带有纯虚函数的类称为抽象类，不能定义抽象类的对象。
+  
+  派生类可以根据自己的需要，分别覆盖纯虚函数，从而实现真正意义上的多态性。 
+  
+  格式如下:
+  ```cpp
+  virtual void showInfo( ) = 0;
+  ```
+  实例：
+  ```cpp
+  class Student 
+  {
+  protected: 
+    char name[51]; 
+    int hours;
+  public: 
+    Student() { name[0] = hours = 0; } 
+    void setName(char* n) { strcpy(name, n); } 
+    // Pure virtual function
+    virtual void setHours( ) = 0; 
+    virtual void showInfo( ) = 0;
+  };
+  class CsStudent : public Student 
+  { 
+    int mathHours, csHours;
+  public: 
+    void setMathHours(int mh) { mathHours = mh; } 
+    void setCsHours(int csh) { csHours = csh; } 
+    void setHours() 
+    { hours = mathHours + csHours;  } 
+    void showInfo(); 
+  };
+  void CsStudent::showInfo() 
+  { 
+    cout << " Name: " << name << endl; 
+    cout << "\t Math: " << mathHours << endl;
+    cout << "\t CS : " << csHours;
+    cout << "\n\t Total Hours: " << hours; 
+  } 
+  void main() 
+  {
+    CsStudent student1; 
+    char chInput[51]; 
+    int intInput;
+    cout << "Enter the following information:\n"; 
+    cout << "Name: "; 
+    cin.getline(chInput, 51); 
+    student1.setName(chInput);
+    cout << "Number of math hours completed: "; 
+    cin >> intInput; 
+    student1.setMathHours(intInput); 
+    cout << "Number of CS hours completed: "; 
+    cin >> intInput; 
+    student1.setCsHours(intInput); 
+    student1.setHours(); 
+    cout << "\nSTUDENT INFORMATION\n"; 
+    student1.showInfo(); 
+  }
+  ```
+* 关于抽象类和纯虚函数小结
+    
+  如果一个类包含有纯虚函数，那么它就是抽象类，必须让其它类继承；
+    
+  基类中的纯虚函数没有代码； 
+    
+  不能定义抽象类的对象，即抽象基类不能实例化；
+    
+  必须在子类中覆盖基类中的纯虚函数。
+
+* 指向父类的指针
+
+  指向基类对象的指针可以指向其子类的对象； 
+  
+  如果子类覆盖了基类中的成员，但通过基类指针所访问的成员仍是基类的成员，而不是子类成员。
+
+  实例：
+  ```cpp
+  class Base
+  { 
+  public: 
+    void show() { cout << "In Base class.\n"; } 
+  }; 
+  class Derived : public Base 
+  { 
+  public: 
+    void show() { cout << "In Derived class.\n"; } 
+  }; 
+  void main() 
+  { 
+    Base* bptr; 
+    Derived dobject; 
+    bptr = &dobject; 
+    bptr->show();
+  }
+  ```
+
+### 7.7 多重继承与多继承
+* 多重继承
+  
+  类C继承类B中所有的成员，包括B从A中继承所得的成员
+
+  如：class C->class B->class A
+* 多继承
+
+  如果一个子类具有两个或多个直接父类，那么就称为多继承。
+
+  对父类构造函数的调用，是按照继承的顺序进行。
+
+  实例：
+  ```cpp
+  class DateTime : public Date, public Time{}
+  ```  
+
+### 7.8 类模板
+  * 类模板用于创建类属类和抽象数据类型，从而使程序员可以创建一般形式的类，而不必编写处理不同数据类型的类。
+
+    类模板的定义和实现必须在同一个文件中，通常是头文件。编译器看到模 板实现时才展开模板。
+
+	  实例：
+	  ```cpp
+	  template  < class  T >
+	  class  FreewillArray 
+	  {
+	  public:
+	      FreewillArray( ) {  aptr = 0 ;  arraySize = 0 ;}
+	      FreewillArray( int ) ;	// 构造函数
+	      FreewillArray( const FreewillArray  & ) ;  // 拷贝构造函数
+	      ~FreewillArray( ) ;    	// 析构函数
+	      int  size( )  {  return  arraySize ;  }
+	      T  &operator[ ]( const  int  & ) ; 	// 对 [ ] 进行重载
+	  private:
+	      T  	*aptr ;			// 采用模板参数T替换过去的int 
+	      int  	arraySize ;
+	      void  memError( ) ;    // 处理内存分配错误
+	      void  subError( ) ;    // 处理下标越界错误
+	  } ;
+
+		//  FreewillArray类模板的构造函数。设置数组的大小，并对数组分配内存
+	  template  < class  T >
+	  FreewillArray  < T >::FreewillArray( int  s ) 
+	  {
+	      arraySize = s ;
+	      aptr = new T [s] ;
+	      if( aptr == 0 )    
+	      memError( ) ;
+	      for( int  count = 0 ;  count < arraySize ;  count++ ) 
+	      *( aptr + count ) = 0 ;
+	  }
+
+	      //  FreewillArray类模板的拷贝构造函数。
+	  template  < class  T >
+	  FreewillArray  < T >::FreewillArray( const FreewillArray  &obj ) 
+	  {
+	      arraySize = obj.arraySize ;
+	      aptr = new T [arraySize] ;
+	      if( aptr == 0 )    
+	      memError( ) ;
+	      for( int  count = 0 ;  count < arraySize ;  count++ ) 
+	      *( aptr + count ) = *( obj.aptr + count ) ;
+	  }
+
+	      //  FreewillArray类模板的析构函数。
+	  template  < class  T >
+	  FreewillArray  < T >::~FreewillArray( ) 
+	  {
+	      if( arraySize > 0 ) 
+	      delete [ ] aptr ;
+	  }
+
+	      //  memError 函数。当内存分配出错时，显示错误信息，并终止程序
+	  template  < class  T >
+	  void  FreewillArray  < T >::memError( ) 
+	  {
+	      cout << "错误：无足够的内存空间.\n" ;
+	      exit( 0 ) ;
+	  }
+
+	      //  subError 函数成员。当数组下标越界时，显示错误信息，并终止程序
+	  template  < class  T >
+	  void  FreewillArray  < T >::subError( ) 
+	  {
+	      cout << "错误：数组下标越界\n" ;
+	      exit( 0 ) ;
+	  }
+
+	      //  重载运算符[ ]，函数的参数是一个下标，在正常情况下，函数返回
+	      // 下标指定的数组元素的引用，否则调用subError函数终止程序。
+	  template  < class  T >
+	  T  &FreewillArray  < T >::operator[ ]( const  int  &sub ) 
+	  {
+	      if( sub < 0 || sub > arraySize )
+	      subError( ) ;
+	      return  aptr[sub] ;
+	  }
+	  int  main( ) 
+	  {   
+	      FreewillArray <int> intTable(10);    //intTable和floatTable都是对象
+	      FreewillArray <float> floatTable(10) ;
+	    int x;
+
+	      for( x = 0 ;  x < 10 ;  x++ ) 	    // 在数组中存储值
+	      {
+	      intTable[x] = x ;
+	      floatTable[x] = x ;
+	      }
+
+	      // 显示数组中的值
+	      cout << "intTable中的值是：\n\t" ;
+	      for( x = 0 ;  x < 10 ;  x++ ) 
+	      cout << intTable[x] << "  " ;
+	      cout << endl ;
+
+	      cout << "floatTable中的值是：\n\t" ;
+	      for( x = 0 ;  x < 10 ;  x++ ) 
+	      cout << floatTable[x] << "  " ;
+	      cout << endl ;
+
+	      // 对数组元素采用内嵌+操作
+	      for( x = 0 ;  x < 10 ;  x++ ) 	
+	      {
+	      intTable[x] = intTable[x] + 1 ;
+	      floatTable[x] = floatTable[x] + 1.5f ;
+	      }
+
+	      // 显示数组中的值
+	      cout << "intTable中的值是：\n\t" ;
+	      for( x = 0 ;  x < 10 ;  x++ ) 
+	      cout << intTable[x] << "  " ;
+	      cout << endl ;
+
+	      cout << "floatTable中的值是：\n\t" ;
+	      for( x = 0 ;  x < 10 ;  x++ ) 
+	      cout << floatTable[x] << "  " ;
+	      cout << endl ;
+
+	      // 对数组元素采用内嵌++操作
+	      for( x = 0 ;  x < 10 ;  x++ ) 	
+	      {
+	      intTable[x]++ ;
+	      floatTable[x]++ ;
+	      }
+
+	      // 显示数组中的值
+	      cout << "intTable中的值是：\n\t" ;
+	      for( x = 0 ;  x < 10 ;  x++ ) 
+	      cout << intTable[x] << "  " ;
+	      cout << endl ;
+
+	      cout << "floatTable中的值是：\n\t" ;
+	      for( x = 0 ;  x < 10 ;  x++ ) 
+	      cout << floatTable[x] << "  " ;
+	      cout << endl ;
+
+	      return 0;
+	  }
+	  ``` 
 
 ---
 
