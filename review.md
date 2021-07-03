@@ -848,7 +848,137 @@
 
 ## <span id="8">8 异常处理</span>
 
-* 
+* 基本异常
+
+  异常是在程序执行期间的突发性事件
+
+  异常与错误不同，错误可以通过编译系统处理
+
+* 抛出异常
+  <pre name = "code" class = "c++">
+  float divide(int number, int div) {
+    if(div == 0) {
+      throw "ERROR: divided by zero";
+    }
+    else {
+      return float(number) / div;
+    }
+  }
+  </pre>
+
+* 处理异常
+  <pre name = "code" class = "c++">
+  try {
+    <可能出现异常的代码>
+  }
+  catch (exception param1) {
+    <处理异常类型1的代码>
+  }
+  catch (exception param2) {
+    <处理异常类型2的代码>
+  }
+  </pre>
+
+* 异常处理失败的原因
+
+  try语句块中世纪产生的异常，与catch语句圆括号指定要捕捉的异常类型不匹配
+
+  try语句的范围太小，在try语句之前就已经产生了异常，那么后面的try语句块将不再执行
+
+* 基于对象的异常处理
+
+  C++除了支持基本类型的异常处理外，还支持面向对象的异常处理
+
+  C++在处理多种类型的异常时，要求这些异常对象必须属于不同类型，并且对于每种类型的异常都要编写一段对应的catch代码
+
+  栗子：
+  <pre name = "code" class = "c++">
+  class IntRange {
+    int input, lowest, highest;
+  public:
+    class tooLow {};
+    class tooHigh {};
+    InRange() {
+      lowest = lowest;
+      highest = highest;
+    }
+    int getInput() {
+      cin >> input;
+      if(input < lowest) {
+        throw tooLow();
+      }
+      else if(input > highest) {
+        throw tooHigh();
+      }
+      return input;
+    }
+  };
+  int main() {
+    InRange range;
+    int uerValue;
+    try {
+      userValue = range.getInput();
+    } 
+    catch(IntRange::tooLow) {...}
+    catch(IntRange::tooHigh) {...}
+    return 0;
+  }
+  </pre>
+
+  还可以通过异常对象将异常信息传递给异常处理者
+  <pre name = "code" class = "c++">
+  class IntRange2 {
+    int input;
+  public:
+    class OutOfRange {
+    public: 
+      int value;
+      OutOfRange(int i) {
+        value = i;
+      }     
+    };
+    int getInput() {
+      cin>>input;
+      if(...) {
+        throw OutOfRange(input);
+      }
+      return iuput;
+    }
+  };
+  int main() {
+    IntRange2 range;
+    int userValue;
+    try {
+      userValue = range.getInput();
+    }
+    catch (IntRange2::OutOfRange ex) {
+      cout << ex.value;
+    }
+    return 0;
+  }
+  </pre>
+
+* 注意事项
+  
+  * 一旦程序抛出异常，即使在异常处理以后，程序也不能回到原来的抛出点继续执行
+
+  * 一旦程序抛出异常，执行throw语句的函数将立即停止运行
+  * 对象的函数成员抛出了异常，那么将立即对该对象调用析构函数
+  * 在try块中创建了对象，并且这些对象还未来得及析构，那么将对这些对象立即调用析构函数
+
+* 再次抛出异常
+  <pre name = "code" class = "c++">
+  try {
+    ...
+  }
+  catch(exception param1) {
+    ...
+    throw; //经过处理后再次抛出异常交给函数调用链的上层函数处理
+  }
+  catch(exception param2) {
+    ...
+  }
+  </pre>
 
 ---
 
