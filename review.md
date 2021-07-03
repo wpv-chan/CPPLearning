@@ -1319,6 +1319,260 @@ file.write((char *)buffer,sizeof(buffer));
 
 ## <span id="5">5 类的基础部分</span>
 
+* **过程化程序设计的缺陷**
+  
+  1、大量的全局变量;
+
+  2、程序复杂:程序员难以理解成百，上千的函数;
+
+  3、程序难以进行修改和扩充。
+
+  4、过程化设计是以过程为中心(函数)。
+
+&nbsp;
+* 类是一种用户自定义类型，声明形式为
+  ```cpp
+  class 类名
+  {
+    内容;
+  }
+  ```
+* **类的内容**
+  
+  #### 数据类型
+  public：可以在类外通过对象访问
+
+  private：只能通过类的成员函数访问
+
+  protected：与private类似，但在继承时保持功能
+
+&nbsp;
+* **定义成员函数**:
+  
+  #### 方式一、在类内部定义
+  ```cpp
+  class Rectengle
+  {
+    private:
+      float width;
+      float length:
+      float area;
+    public:
+      void setData(float w,float l)
+      {
+        width=w;
+
+        length=l;
+      }
+      void calcArea( );
+      float getWidth( );
+      float getLength( );
+      float getArea( );
+  };
+  ```
+  #### 方式二、在类的外部定义
+  ```cpp
+  class Rectengle
+  {
+    private:
+      float width;
+      float length:
+      float area;
+    public:
+      void setData(float,float);
+      void calcArea( );
+      float getWidth( );
+      float getLength( );
+      float getArea( );
+  };
+
+  void Rectangle::setData(float w, float l )
+  {
+    width=w;
+    length=l;
+  }
+  float Rectangle::getWidth( )
+  {
+    return width;
+  }
+  ```
+
+* **定义对象**:
+  #### 实例
+  ```cpp
+  int main()
+  {
+    Rectangle box;
+    float wide,boxLong;
+
+    cout <<"请输入长和宽?";
+    cout <<"请输入长和宽?";
+    box.setData(wide, boxLong);
+    box.calcArea( );
+
+    cout << "矩形的数据:\n";
+    cout << "宽: "<< box.getWidth() << endl;
+    cout << "长:" << box.getLength( ) << endl;
+    cout << "面积: " << box.getArea( ) <<endl;
+  }
+  ```
+
+
+### 5.2 类的多文件组织方式
+* **组织方式**:
+  
+  类的定义**存储在头文件**里(类定义文件)
+
+  成员**函数定义存储在.cpp文件**(类的实现文件)
+
+  应用程序通过#include包含头文件，将类的实现文件和主程序进行联编，从而
+生成一个完整的程序
+
+&nbsp;
+### 5.3 构造函数与析构函数
+* **定义**
+  
+  构造函数：是一个函数成员，在对象创建时，采用给定的值，自动调用该
+  函数将对象中的数据成员初始化
+
+  析构函数：也是一个函数成员，当对象终止时，将自动调用该函数进行
+  “善后”处理
+
+&nbsp;
+* **构造函数的特点**
+  
+  1.构造函数是与类同名的函数成员;
+
+  2.没有返回值类型，也没有void;
+
+  3.如果构造函数没有参数，则称为缺省构造函数;
+
+  4.如果程序中未声明，则系统自动生成一个缺省形式的构造函数;
+
+  5.构造函数允许为内联函数、重载函数、带缺省形参值的函数。
+
+* **构造函数实例**:
+```cpp
+class Invoiceltem
+{
+char *desc;
+int units;
+public:
+InvoiceItem( )
+{desc = new char [51]; }
+void setInfo(char *dscr, int un)
+{
+strcpy(desc, dscr);
+units = un;
+}
+char *getDesc( ) { return desc;}
+int getUnits( ) { return units:}
+};
+
+int main()
+{
+Invoiceltem stock;//定义时候自动调用
+stock.setInfo( "鼠标"
+, 20);
+cout << stock.getDesc( ) << endl;
+cout << stock.getUnits( ) << endl;
+}
+```
+  #### 指向对象的指针
+  * InvoiceItem *ptr;
+
+  * ptr=new InvoiceItem;//此时调用构造函数
+
+&nbsp;
+* **析构函数的特点**
+  
+  1、析构函数也与类同名，前面多一个波浪号(~)
+
+  2、当一个对象终止时，系统自动调用析构函数对此对象做“善后”处理。
+
+  3、与构造函数一样，析构函数也没有返回值类型。
+
+  4、析构函数无参数。
+
+  5、一个类只能有一个析构函数。
+
+  6、delete对象时，将调用析构函数。
+
+* **析构函数实例**
+```cpp
+class Invoiceltem
+{ char *desc;
+int units;
+public:
+InvoiceItem( )
+{desc = new char [51];
+cout << “构造函数\n;} ~InvoiceItem( )
+{delete []desc；
+cout << “析构函数\n“;}
+//其他函数略
+
+int main()
+{
+Invoiceltem stock;
+stock.setInfo( "鼠标"
+, 20);
+cout << stock.getDesc( ) << endl;
+cout << stock.getUnits( ) << endl;
+}
+```
+
+* **带参数构造函数**
+  
+  常常需要把一些数据传递给构造函数，用于初始化对象的成员。
+
+  构造函数可以有缺省参数。
+
+  **实例**
+  ```cpp
+  class Sale
+  {
+   float taxRate,total;
+   public:
+   Sale(float rate)
+   {
+     taxRate=rate;
+   }
+  }
+  ```
+
+### 5.4 重载构造函数
+一个类中可以定义多个构造函数
+* **缺省构造函数的表现形式**
+  
+  1、如果类中没有定义构造函数，系统将提供一个无参构造函数(属缺省构造函数),该函数不实现任何功能。如果用户自定义了一个构造函数，那么系统缺省的构造函数将失效。
+
+  2、如果类中定义有无参的构造函数，那么该构造函数也是缺省的构造函数。
+
+  3、如果类中定义有带参的构造函数，并且所有形参均具有缺省值，那么该构造函数也属于缺省的构造函数。
+
+  4、一个类只能有一个缺省构造函数，否则将产生二义性。
+  
+  出错实例：
+  ```cpp
+  class A;
+  {
+    int a;
+
+    public:
+    A(){a=0;}
+    A(aa=1){a=aa;}//两构造函数产生歧义，因为有缺省值，也属于缺省构造函数
+  }
+  ```
+
+&nbsp;
+* **对象数组**
+  #### 特点
+  * 创建对象数组时，数组中**每个元素(对象)都将调用构造函数**。
+  
+  * 如果**没有**为数组元素指定**初始值**，元素便使用缺省值来初始化，即**调用缺省构造函数**。
+
+  * 当数组中**每一个对象被删除**时，**都要调用一次析构函数**。
+
 ---
 
 ## <span id="6">6 类的高级部分</span>
