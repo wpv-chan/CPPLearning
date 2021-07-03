@@ -1577,6 +1577,170 @@ cout << stock.getUnits( ) << endl;
 
 ## <span id="6">6 类的高级部分</span>
 
+### 6.1 静态数据成员
+#### 特点
+* 用关键字static声明；**同一个类中的所有对象都共享该变量**；
+  
+* 必须**在类外定义和初始化**，用(::)来指明所属的类。
+  
+* 静态变量**不依赖于对象而存在**，无论是否定义该类的对象，这种类型的变量都存在。
+  
+* 静态数据成员实际上是在类外定义的一个变量，它的生存期和整个程序的生存期一样，在**定义对象之前，静态数据成员就已经存在**。
+
+* 实例
+```cpp
+class StaticDemo
+{ 
+  static int x ;
+  int y ;
+  public:
+    void putx( int a){ x=a ; }
+    void puty( int b ){ y=b ; }
+    int getx( ) { return x ; }
+    int gety( ) { return y ; }
+} ;
+int StaticDemo::x ;// 静态变量x将被StaticDemo类的所有对象共享
+
+int main() 
+{
+StaticDemo obj1, obj2 ;
+obj1.putx(5) ;
+obj1.puty( 10) ;
+obj2.puty(20 ) ;
+cout << "x: "<< obj1.getx( ) << " " << obj2.getx( ) << endl ;
+cout << "y: "<< obj1.gety( ) <<" "<< endl;
+}
+
+```
+
+### 6.2 静态成员函数
+#### 特点
+* 静态函数成员是类中的一个函数，有**static**修饰。
+
+* 静态函数成员和静态数据成员类似，在**对象生成之前也已经存在**。这就是说在对象
+产生之前，静态的函数成员就能访问其它静态成员。
+
+* **类外代码可以使用类名和作用域操作符来调用静态成员函数**。
+  
+* 静态成员函数**只能引用属于该类的静态数据成员**或**静态成员函数**。
+  
+* 对于静态的函数成员，是通过类名和作用域分辨符调用的。
+  
+* 也可以采用对象点的方式调用
+
+* 实例
+```cpp
+class Budget
+{ 
+  static float corpBudget;//预算的总额
+  float divBudget;//非静态成员
+public:
+  Budget( ) { divBudget = 0; }
+  void addBudget( float b)
+  { 
+    divBudget += b;
+    corpBudget += divBudget;
+  }
+  static void mainOffice( float );//静态的函数成员
+  float getDivBudget( ) { return divBudget; }
+  float getCorpBudget( ){ return corpBudget;}
+};
+
+float Budget::corpBudget = 0 ;//静态数据必须在类的外部进行定义和初始化
+
+void Budget::mainOffice(float moffice)
+{
+corpBudget += moffice;//只能使用静态变量或其他静态函数或自己的局部变量
+}
+
+void main( )
+{ 
+float amount;
+int i;
+float bud;
+cout << "Enter main office's budget request: ";
+cin >> amount;
+Budget::mainOffice(amount);//调用静态成员函数
+Budget divisions[4]; //定义一个数组，一个总公司有4个子公司
+for ( i = 0; i < 4; i++)
+{ cout << "Enter the budget for Division ";
+cout << (i + 1) << " " ;
+cin >> bud;
+divisions[i].addBudget(bud);
+}
+cout << "\n Here are the division budget :\n";
+for ( i = 0; i < 4; i++)
+{
+cout << "\t 子公司" << (i + 1) << "\t 预算";
+cout << divisions[i].getDivBudget( ) << endl;
+}
+cout<<''\t 公司总预算：'';
+cout<< divisions[i].getCorpBudget( )<<endl;
+```
+
+### 6.3 友元函数
+#### 特点
+* 友元函数**不是类中的函数成员**，但它和类的函数成员一样，**可以访问类中定义的私有成员**。
+
+* 友元函数**可以是一个外部函数**，也**可以是另外一个类的函数成员**。
+
+* 若一个类为另一个类的友元，则此类的**所有成员都能访问对方类的私有成员**。
+
+#### 声明方式
+* friend 类型 函数名字(数据类型)
+
+* 外部函数作为类的友元实例：
+```cpp
+class Point
+{
+int xPos, yPos ;
+public:
+Point(int xx=0, int yy=0 )
+{ xPos=xx; yPos=yy; }
+int GetXPos( ) { return xPos; }
+int GetYPos( ) { return yPos; }
+friend double Distance(Point &a, Point &b); //表面上看是类的成员函数
+};
+
+double Distance( Point & a, Point & b)//注意没有作用域分辨符
+{
+double dx=a.xPos-b.xPos;
+double dy=a.yPos-b.yPos;
+return sqrt(dx*dx+dy*dy);
+}
+
+
+```
+
+* 类的成员函数作为另外一个类的友元实例
+```cpp
+class A;//超前引用
+class B
+{
+  public: 
+  void set(int x,A &o); 
+} 
+class A
+{ 
+  int data; 
+  void show(){cout <<data<<endl;} 
+  public: 
+  friend void B::set(int x,A &o); //该函数是类A的友元，须在A后定义
+}
+
+void B::set(int x, A &o) 
+{ 
+  o.data=x;o.show();
+ } 
+ 
+void main()
+{ 
+  A a; 
+  B b; 
+  b.set(6,a); 
+}
+```
+
 ### 6.4 对象的赋值问题
 
   * 采用赋值运算符“=”可以将一个对象赋值给另外一个对象，或者采用一个对象初始化另外一个对象
