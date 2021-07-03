@@ -20,60 +20,60 @@
 ### 1.1 处理字符与字符串
 
 * 求字符串的长度
-  <pre name = "code" class = "c++">
+  ```cpp
   char name[10] = {'T', 'o', 'm', '\0', 'P', 'e', 't', 'e', 'r', '\0'};
   cout << strlen(name) << sizeof(name) << endl; 
-  </pre>
+  ```
   注意：求字符串长度时，到'\0'就会结束
 
 * 字符串的拷贝
   
   **方式一**
-  <pre name = "code" class = "c++">
+  ```cpp
   char* strcpy(char s1[], char s2[])
-  </pre>
+  ```
   例如
-  <pre name = "code' class = "c++">
+  ```cpp
   char src[80] = {"I am a student"};
   char dst[80];
-  strcpy(dst,. src);
-  </pre>
+  strcpy(dst, src);
+  ```
   注意：不能使用‘=’号进行直接赋值
 
   **方式二**
-  <pre name = "code" class = "c++">
-  char* strncoy(char s1[], const char s2[], int len)
-  </pre>
+  ```cpp
+  char* strncpy(char s1[], const char s2[], int len)
+  ```
   例如
-  <pre name = "code" class = "c++">
+  ```cpp
   char src[80] = {"I am a student"};
   char dst[80];
-  strncpy(dst, src);
+  strncpy(dst, src, 10);
   dst[10] = '\0';
-  </pre>
+  ```
   注意：必须加上'\0'字符串结束标志
 
 * 字符串的连接
-  <pre name = "code" class = "c++">
+  ```cpp
   char* strcat(char s1[], const char s2[], int len)
-  </pre>
+  ```
   将s2字符串连接到s1的尾部，修改了s1，返回的是s1的首地址
 
   注意：s1的空间要足够大
   
   例如：
-  <pre name = "code" class = "c++">
+  ```cpp
   char s1[20] = "You";
   char s2[20] = "&Me";
   strcat(s1, s2);
-  </pre>
+  ```
 
 * 字符串的比较
   
   **方式一**
-  <pre name = "code" class = "c++">
+  ```cpp
   int strcmp(const char s1[], const char s2[])
-  </pre>
+  ```
   比较两个字符串的大小，就是从左到右逐个比较对应字符的ASCII码
 
   若s1 > s2，则返回1
@@ -83,96 +83,96 @@
   若s1 = s2，则返回0
 
   **方式二**
-  <pre name = "code" class = "c++">
+  ```cpp
   int strncmp(const char s1[], const s2[], int len)
-  </pre>
+  ```
   比较两个字符串的前len个字符，若字符串s1或者s2的长度小于len，则与strcmp无异
 
   例如：
-  <pre name = "code" class = "c++">
+  ```cpp
   char s1[10] = "China";
   char s2[10] = "Chinese";
   cout << strncmp(s1, s2, 5) << endl;//输出结果为-1
-  </pre>
+  ```
 
 * 字符串的大小写转换
   
   **大写变小写**
-  <pre name = "code" class = "c++">
+  ```cpp
   char* strlwr(char s[])
-  </pre>
+  ```
   **小写变大写**
-  <pre name = "code" class = "c++">
+  ```cpp
   char* strupr(char s[])
-  </pre>
+  ```
 
 * 字符串的子串查找
-  <pre name = "code" class = "c++">
+  ```cpp
   char* strstr(const char s1[], const char s2[])
-  </pre>
+  ```
   如果字符串s1包含要查找的子串s2，则返回s1在s1中第一次出现的地址，否则直接返回NULL
 
 * 字符串转换为整数的函数
-  <pre name = "code" class = "c++">
+  ```cpp
   int atoi(const char str[])
-  </pre>
+  ```
   例如：
-  <pre name = "code" class = "c++">
+  ```cpp
   char s1[80] = "789123",
   s2[80] = "789X123",
   s3[80] = "X123";
   int i = atoi(s1);//789123
   int j = atoi(s2);//789
   int k = atoi(s3);//0
-  </pre>
+  ```
   转换成别的数据类型就自己类比啦
 
   atof，atod...
 
 * 整数转换为字符串
-  <pre name = "code" class = "c++">
+  ```cpp
   char* itoa(int value, char str[], int radix)
-  </pre>
+  ```
   例如：
-  <pre name = "code" class = "c++">
+  ```cpp
   int n = 123;
   char s1[20], s2[20];
   itoa(n, s1, 3);//处理3进制
   itoa(n, s2, 10);//处理10进制
-  </pre>
+  ```
 
 ### 1.2 标准C++的String类
 
 * 包含的头文件
-  <pre name = "code" class = "c++">
+  ```cpp
   string
-  </pre>
+  ```
 
 * 读取整行
-  <pre name = "code" class = "c++">
+  ```cpp
   string name;
   getline(cin, name);
-  </pre>
+  ```
   注意：要和char类型做区分
-  <pre name = "code" class = "c++">
+  ```cpp
   char name[10];
   gets(name);
   cin.get(name, 10);
   cin.getline(name, 10);
-  </pre>
+  ```
 
 * string对象的比较
   string对象也可以与字符串比较，例如
-  <pre name = "code" class = "c++">
+  ```cpp
   string name1 = "John";
   char name2[10] = "Jone";
   cout << (name1 > name2);//0
   cout << (name1 < name2);//1
   cout << (name1 == name2);//0
-  </pre>
+  ```
 
 * string对象的初始化
-  <pre name = "code" class = "c++">
+  ```cpp
   string test1;    //空串
   string test2 = "内容"; //使用=
   string test3("内容");   //使用引用字符数组作为参数传给构造函数
@@ -182,10 +182,10 @@
   string test7 = test2.substr(pos,num); //从test2中的第pos个位置开始，拷贝个数为num个字符
   string test8 = test2.substr(); //参数列表为空则会拷贝test2的整个对象（复制test2的简便方法）
   string test9(num,ch); //拷贝num个字符型ch到test9
-  </pre>
+  ```
 
 * string类型常用的操作符
-  <pre name = "code" class = "c++">
+  ```cpp
   =, assign() //赋以新值
   swap() //交换两个字符串的内容
   +=, append(), push_back() //在尾部添加字符
@@ -211,7 +211,7 @@
   begin() end() //提供类似STL的迭代器支持
   rbegin() rend() //逆向迭代器
   get_allocator() //返回配置器
-  </pre>
+  ```
 
 ### 1.3 指针的概念、指针变量的定义和使用
 
@@ -219,9 +219,9 @@
   
 * 定义指针变量
   例如：
-  <pre name = "code" class = "c++">
+  ```cpp
   int* pInt;
-  </pre>
+  ```
   注意：
    
     * 指针不知向内存的0号单元，若指针变量值为0或者NULL，则表示空指针
@@ -238,13 +238,13 @@
   &：访问指针内储存的地址
 
 * 引用指针变量
-  <pre name = "code" class = "c++">
+  ```cpp
   int x = 30, y = 90;
   int *p1 = &x, *p2 = &y, t;
   t = *p1;
   *p1 = *p2;
   *p2 = t;
-  </pre>
+  ```
   上述例子实现了p1与p2指向变量的值的交换
 
 ### 1.4 指针与数组
@@ -266,31 +266,31 @@
 * 指向一维数组元素的指针
   
   数组名代表该数组的开始地址，数组名即时一个指针常量，例如
-  <pre name = "code" class = "c++">
+  ```cpp
   int a[10], *p;
   p = a;
   p = &a[0];//二者等价
-  </pre>
+  ```
 
 * 指针比较
 
   指向同一个数组的两个指针可以进行比较
 
   逆序存放的代码
-  <pre name = "code" class = "c++">
+  ```cpp
   for(p1 = set, p2 = set+length-1; p1 < p2; p1++, p2--) {
     t = *p1;
     *p1 = *p2;
     *p2 = t;
   }
-  </pre>
+  ```
 
 * 指针变量之间的加法无意义
 
 * 指向二维数组元素的指针
   
   二维数组元素a[i][j]的表示
-  <pre name = "code" class = "c++">
+  ```cpp
   //表示地址
   &a[i][j]
   a[i]+j
@@ -301,11 +301,11 @@
   \*(a[i]+j)
   \*(\*(a+i)+j)
   (\*(a+i))[j]
-  </pre>
+  ```
   注意：a[0] == a[0][0]
 
   一个通用的二维数组的输出例子
-  <pre name = "code" class = "c++">
+  ```cpp
   void Print(int* p, int row, int col) {
     int i;
     for(i = 0; i < row*col; i++, p++) {
@@ -316,7 +316,7 @@
     }
     cout << endl;
   }
-  </pre>
+  ```
 
 ---
 
@@ -327,40 +327,40 @@
 * 基本类型的变量作函数形参
   
   交换变量x与y的值，采用基本类型的变量做函数形参
-  <pre name = "code" class = "c++">
+  ```cpp
   void swap(int a, int b) {
     int t;
     t = a;
     a = b;
     b = t;
   }
-  </pre>
+  ```
   这是单向的值传递，形参的变化不会影响实参
 
 * 引用类型作为函数形参
 
   交换变量x与y的值，采用引用类型做函数的形参
-  <pre name = "code" class = "c++">
+  ```cpp
   void swap(int& a, int& b) {
     int t;
     t = a;
     a = b;
     b = t;
   }
-  </pre>
+  ```
   通过定义被调用中的参数为引用类型，将主调函数的值改变
 
 * 指针类型作为函数形参
 
   交换变量x与y的值，采用指针类型做函数形参
-  <pre name = "code" class = "c++">
+  ```cpp
   void swap(int* px, int* py) {
     int t;
     t = *px;
     *px = *py;
     *py = t;
   }
-  </pre>
+  ```
   通过定义被调用函数中的参数为指针类型，通过间接存取将主调函数的值改变
 
   注意：指针类型做参数形参的另一种形式是数组名做函数参数
@@ -370,28 +370,28 @@
 * 指针型函数
   
   一个函数的返回值是某种数据类型的地址值就是指针型函数
-  <pre name = "code" class = "c++">
+  ```cpp
   int* function(int x, int y) {
     return x+y;
   }
-  </pre>
+  ```
 
 * 函数指针
   
   函数的入口地址。函数指针变量就是指向函数入口地址的变量。
-  <pre name = "code" class = "c++">
+  ```cpp
   int (*fun)(int , int);
   int max(int x, int y) {
     return x > y?x : y;
   }
   fun = max;
-  </pre>
+  ```
   用法示例
-  <pre name = "code" class = "c++">
+  ```cpp
   int process(int x, int y, int (*fun)(int, int)) {
     return fun(x, y);
   }
-  </pre>
+  ```
 
 ### 2.3 指针数组与指向指针的指针
 
@@ -401,22 +401,22 @@
 
 * 指针数组与数组指针的本质区别就是*与[]的优先级顺序不同
 
-  <pre name = "code" class = "c++">
+  ```cpp
   int (*p)[M]; //p是一个数组指针，一个行指针，指向拥有M个元素的一维数组
   int* p[M]; //p是一个指针数组，包含有M个指针
-  </pre>
+  ```
 
 * main函数的参数
   
   在main()函数头部声明的格式为
-  <pre name = "code" class = "c++">
+  ```cpp
   int main(int argc, char* argv[])
   int main(int argc, char** argv)
   //argc表示命令行中字符串的个数
   //argv[]指向命令行中的各个字符串
-  </pre>
+  ```
   举个栗子，通过命令行参数计算输入数据的和
-  <pre name = "code" class = "c++">
+  ```cpp
   int main(int argc, char* argv[]) {
     int sum, i;
     cout << "Command name:" << argv[0] << endl;
@@ -425,14 +425,14 @@
     }
     cout << "Sum is:" << sum << endl;
   }
-  </pre>
+  ```
 
 * 指向指针的指针
   
   举个栗子
-  <pre name = "code" class = "c++">
+  ```cpp
   int x, *p = &x, **pp = p;
-  </pre>
+  ```
 
 ### 2.4 内存的动态分配与释放
 
@@ -445,7 +445,7 @@
 * 程序动态申请空间是由用户在编程时安排的
 * 申请多少空间由运行时情况而定，一般通过指针访问空间
 * new用于动态申请储存空间，delete用于释放new申请的存储空间
-  <pre name = "code" class "c++">
+  ```cpp
   //分配单个元素空间
   int* iptr;
   iptr = new int;
@@ -457,7 +457,7 @@
   int* a;
   a = new int[100];
   delete []a;
-  </pre>
+  ```
   注意：如果函数的参数是一个指针，不要用指针去申请动态内存，否则会因为申请的空间无法释放而造成内存泄漏
 
 ### 2.5 void 和 const 修饰指针变量
@@ -470,11 +470,11 @@
 
 * 任何类型的指针都可以直接赋给它，无需类型转换
 
-  <pre name = "code" class = "c++">
+  ```cpp
   void* p1;
   int* p2;
   p1 = p2;
-  </pre>
+  ```
 
 * 不能对void指针进行算数操作
 
@@ -484,24 +484,24 @@
   
   可以改变指针所指的空间，但不可以通过指针改变现在所指的内容
 
-  <pre name = "code" class = "c++">
+  ```cpp
   int i = 6;
   const int* p1 = &i;
   const int m = 16;
   *p1 = 16; //wrong
   p1 = &m; //true
-  </pre>
+  ```
 
 * 常量指针
 
   可以改变指针所指向空间中的内容，但是不能改变指针的指向
 
-  <pre name = "code" class = "c++">
+  ```cpp
   char stringA[10] = "abcd", stringB[10] = "xyz";
   char* const sp = atringA;
   sp = stringB; //wrong
   *(sp+1) = 't'; //true
-  </pre>
+  ```
 
 * 指向常量的指针常量
 
@@ -518,51 +518,51 @@
 * 结构体是一种由程序员创建的抽象数据类型
 
 * 先定义结构体
-  <pre name = "code" class = "c++">
+  ```cpp
   struct<结构体名称> {
     <成员列表>
   }; //这里不要忘记了;号
-  </pre>
+  ```
 
 * 再定义变量
-  <pre name = "code" class = "c++">
+  ```cpp
   student John, Mary;
   struct student John, Mary;
-  </pre>
+  ```
 
 * 也可以使用无结构体名构造一次性结构体
-  <pre name = "code" class = "c++">
+  ```cpp
   struct {
     int ID;
     char name[10];
   }John, Mary;
-  </pre>
+  ```
 
 * 初始化结构体类型的变量
 
   用{}括起来的值对结构体变量进行初始化，例如
-    <pre name = "code" class = "c++">
+    ```cpp
     student John = {666, "Joe"};
-    </pre>
+    ```
 
   用同类型的结构体变量初始化另外一个结构体变量
-    <pre name = "code" class = "c++">
+    ```cpp
     student Merry = John;
-    </pre>
+    ```
 
 * 结构体类型变量及其成员的引用
 
   引用结构体变量的成员
-  <pre name = "code" class = "c++">
+  ```cpp
   John.ID = 2333;
-  </pre>
+  ```
 
   整体引用结构体变量
-  <pre name = "code" class = "c++">
+  ```cpp
   student John = {...};
   student Merry;
   Merry = John;
-  </pre>
+  ```
 
   注意
 
@@ -579,13 +579,13 @@
 * 结构体数组与指针
 
   定义结构体数组和初始化
-  <pre name = "code" class = "c++">
+  ```cpp
   student studentList[4];
   student studentList[4] = {{...}, {...}, {...}, {...}};
-  </pre>
+  ```
 
   使用结构体数组
-  <pre name = "code" class = "c++">
+  ```cpp
   //引用元素
   for(int i = 0; i < 4; i++) {
     cout << studentList[i].name;
@@ -594,22 +594,22 @@
   student *ps;
   ps = stud;
   ps++;
-  </pre>
+  ```
 
 ### 3.3 typedef 定义类型名
 
 * 语法格式
-  <pre name = "code" class = "c++">
+  ```cpp
   tyoedef <原类型名> <自定义的类型名>
-  </pre>
+  ```
 
   栗子：
-  <pre name = "code" class = "c++">
+  ```cpp
   typedef char NAME[100];
   NAME Joe;
   //等价于下面
   char Joe[100];
-  </pre>
+  ```
 
 * 注意typedef与#define的不同
 
@@ -628,19 +628,19 @@
   * typedef用于软件移植
   
     比如定义一个叫REAL的浮点类型，在目标平台一上，让它表示最高精度的类型为
-    <pre name = "code" class = "c++">
+    ```cpp
     typedef long double REAL;
-    </pre>
+    ```
 
     而在不支持long double的第二平台上，改为
-    <pre name = "code" class = "c++">
+    ```cpp
     typedef double REAL;
-    </pre>
+    ```
 
     在连double都不支持的平台上，改为
-    <pre name = "code" class = "c++">
+    ```cpp
     typedef float REAL;
-    </pre>
+    ```
 
 ### 3.4 链表
 
@@ -652,13 +652,13 @@
   * 定义足够大————空间浪费
 
 * 链表的结构
-  <pre name = "code" class = "c++">
+  ```cpp
   struct student {
     int ID;
     char name[20];
     student* next; //链表与结构体的区别
   };
-  </pre>
+  ```
 
 * 单向链表
   
@@ -667,7 +667,7 @@
   不带头节点的单向链表
 
 * 链表的应用示例
-  <pre name = "code" class = "c++">
+  ```cpp
   #include "stdafx.h"
   #include <iostream>
   #include <iomanip>
@@ -826,7 +826,7 @@
 	  }
 	  return 0;
   }
-  </pre>
+  ```
 
 ---
 
@@ -855,7 +855,7 @@
   异常与错误不同，错误可以通过编译系统处理
 
 * 抛出异常
-  <pre name = "code" class = "c++">
+  ```cpp
   float divide(int number, int div) {
     if(div == 0) {
       throw "ERROR: divided by zero";
@@ -864,10 +864,10 @@
       return float(number) / div;
     }
   }
-  </pre>
+  ```
 
 * 处理异常
-  <pre name = "code" class = "c++">
+  ```cpp
   try {
     <可能出现异常的代码>
   }
@@ -877,7 +877,7 @@
   catch (exception param2) {
     <处理异常类型2的代码>
   }
-  </pre>
+  ```
 
 * 异常处理失败的原因
 
@@ -892,7 +892,7 @@
   C++在处理多种类型的异常时，要求这些异常对象必须属于不同类型，并且对于每种类型的异常都要编写一段对应的catch代码
 
   栗子：
-  <pre name = "code" class = "c++">
+  ```cpp
   class IntRange {
     int input, lowest, highest;
   public:
@@ -923,10 +923,10 @@
     catch(IntRange::tooHigh) {...}
     return 0;
   }
-  </pre>
+  ```
 
   还可以通过异常对象将异常信息传递给异常处理者
-  <pre name = "code" class = "c++">
+  ```cpp
   class IntRange2 {
     int input;
   public:
@@ -956,7 +956,7 @@
     }
     return 0;
   }
-  </pre>
+  ```
 
 * 注意事项
   
@@ -967,7 +967,8 @@
   * 在try块中创建了对象，并且这些对象还未来得及析构，那么将对这些对象立即调用析构函数
 
 * 再次抛出异常
-  <pre name = "code" class = "c++">
+
+  ```cpp
   try {
     ...
   }
@@ -978,9 +979,33 @@
   catch(exception param2) {
     ...
   }
-  </pre>
+  ```
+
 
 ---
 
 ## <span id="9">9 标准模板STL</span>
 
+### 9.1 STL 概述
+
+* 标准模板库：常用数据结构和算法的模板的集合
+
+* 容器：可以容纳各种数据类型的通用数据结构，是类模板
+
+* 迭代器：可以用于依次存取容器中的元素，类似于指针
+
+* 算法：用来操作容器中的元素的函数模板
+
+#### 9.1.1 容器
+
+* 顺序容器
+
+  vector, deque, list
+
+* 关联容器
+
+  set, multiset, map, multimap
+
+* 容器适配器
+
+  stack, queue, priority_queue
