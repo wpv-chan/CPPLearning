@@ -832,6 +832,489 @@
 
 ## <span id="4">4 文件操作</span>
 
+### 4.1 文件的打开与关闭
+
+* 文件流类型
+
+  ```cpp
+    #include<fstream> //文件流头文件
+    ifstream a//输入文件流，只读取文件流
+    ofstream b//输出文件流，只写入文件流
+    fstream c//文件流
+    ```
+
+* 文件使用过程
+
+  #### **打开文件**
+
+    * 开启方式
+
+    ```cpp
+    ifstream inputFile;
+    inputFile.open("d:\\costumer.dat");
+    //or
+    char fileName[20];
+    cin>>fileName;
+    inputFile.open(fileName);
+    ```
+    *  使用fstream对象时，第二个参数用于表明文件的打开方式
+
+
+
+    ```cpp
+    dataFile.open(“info.dat”, ios::out);//只能用于写
+    dataFile.open(“info.dat”, ios::in);//只能用于读
+    dataFile.open(“info.dat”, ios::noreplace);//表明如果文件已存在，则不能打开该文件，如果省略该模式，文件内容将被刷新
+    ios::nocreate//如果文件不存在，则不能创建
+    ios::app//追加模式
+    ios::ate//如果已存在，直接跳转到文件尾部
+    ios::binary//二进制方式
+    ios::trune//如果文件存在，删除其内容
+
+    //上面展示的是先定义对象，再打开文件
+    //也可以在定义流对象时直接打开文件
+    fstream dataFile("name.dat",ios::in|ios::out);
+
+    ```
+
+    * 测试文件是否打开成功
+    ```cpp
+    ifstream dataFile
+    dataFile.open("cust.dat",ios::in);
+    if(!dataFile)
+    {
+      cout<<"fail to open";
+      exit(0);
+    }
+    ```
+
+
+  #### **关闭文件**
+
+  ```cpp
+  dataFile.close();
+  ```
+    * 为何要关闭文件
+      
+       文件缓冲区是一块小的内存空间
+
+      操作系统限制同时打开的文件数量
+
+  
+
+
+### 4.2 文本文件输入输出
+
+* 使用<<向一个文件写入信息
+  ```cpp
+  #include<iostream>
+  #include<fstream>
+  #include<cstdlib>
+  using namespace std;
+
+  int main()
+  {
+    fstream dataFile;
+    dataFile.open("demoFile.txt",ios::out;
+
+    dataFile<<”Confucius\n”;//写入一个单词，换行
+    dataFile<<”Mo-tse\n”;//写入，换行
+
+    dataFile.close();
+
+    return 0;
+  }
+  ```
+
+* 文件的格式化输出
+  ```cpp
+  #include<iostream>
+  #include<fstream>
+  #include<cstdlib>
+  using namespace std;
+
+  int main()
+  {
+    fstream outFile(“number.txt”,ios:out);
+    int nums[3][3]={1234,3,567,34,8,6789,124,2345,89};
+
+    for(int row=0;row=3;row++)//向文件输出三行
+    {
+      for(int col=0;col<3;col++)
+      {
+         outFile<<setw(10)<<nums[row][col]<<” ”;
+      }
+       outFile<<endl;
+    }
+    outFile.close();
+  }
+  ```
+* 检测文件结束
+  
+  eof()成员函数：检测文件是否已经结尾，无数可读。
+  ```cpp
+  int main()
+  {
+    fstream dataFile;
+    char name[81];
+    dataFile.open(“demofile.txt”,ios::in);
+    while(!dataFile.eof())
+    {
+      dataFile>>name;
+      if(dataFile.fail())
+      break;
+      cout<<name<<”\n”;
+    }
+    dataFile.close();
+  }
+* 采用函数成员读写文件
+
+  **采用>>读文件的缺陷**：空白字符(空格、跳格、换行、回车)是数据之间的分界符，采用>>操作符进行读取时，会忽略空白字符。
+
+#### **getline**成员函数：
+  ```cpp
+    dataFile.getline(str,81,’\n’)
+  ```
+
+**str**: 从文件中读取的数据将存储在该空间中
+
+**81**：从文件中最多能读取80个字符
+
+**’\n’界符**：如果在读满最大字符之前，遇到了界符，那么将停止读取（注意：该参数可选）
+  
+  ```cpp
+  #include<iostream>
+  #include<fstream>
+  #include<cstdlib>
+  using namespace std;
+
+    int main()
+    {
+      fstream readFile;
+      char input[81];
+
+      readFile.open(“myTextFile.txt”,ios::in);
+
+      while(!readFile.eof())
+      {
+        readFile.getline(input,81);//从输入获取最多81个字符进入readFile
+        if(readFile.fail())
+        {
+          break;
+        }
+        cout<<input<<endl;
+      }
+      readFile.close();
+      return 0;
+    }
+  ```
+
+#### get成员函数
+
+  * 例如：inFile.get(ch);
+  
+#### put成员函数
+
+  * 例如：inFile.put(ch);
+```cpp
+#include<iostream>
+#include<fstream>
+#include<cstdlib>
+using namespace std;
+
+int main()
+{
+  fstream dataFile("sentence.txt",ios::out);
+  char ch;
+
+  while(cin.get(ch))
+  {
+    if(ch=="!")
+    {
+      break;
+    }
+    dataFile.put(ch);
+  }
+
+  dataFile.close();
+  return 0;
+}
+```
+
+
+### 4.3 文件出错检测方法
+
+* 出错检测
+
+  #### 流对象的标志位
+
+  * 例如
+  
+  |流对象|内容|
+  |:-|:-|
+  |ios::eofbit|当遇到了输入流的尾部时，设置该位|
+  |ios::failbit|当操作失败时，设置该位|
+  |ios::hardfail |当出现不可恢复错误时，设置该位
+  |ios::badbit |当出现无效操作时，设置该位
+  |ios::goodbit |当上述所有标记都未设置时，设置该位，表明流对象处于正常状态
+
+* 函数检测状态位
+
+  |函数名称|意义|
+  |:-|:-|
+  |eof（） |如果设置了eofbit状态位，该函数将返回true否则返回false
+  |fail（） |如果设置了failbit或hardfail状态位，返回true否则返回false
+  |bad () |如果设置了badbit状态位，该函数将返回true否则返回false
+  |good ()|如果设置了goodbit状态位，返回true否则返回false
+  |clear () |调用该函数，将清楚所有状态位|
+
+**实例**
+```cpp
+#include<iostream>
+#include<fstream>
+#include<cstdlib>
+using namespace std;
+
+void showstate(fstream &);
+int main()
+{
+  int num=10;
+  fstream testFile("stuff.dat",ios::out);
+  if(testFile.fail())
+  {
+    cout<<"打开文件失败!";
+    exit(0);
+  }
+  cout<<”向文件中写数据!\n”;
+
+  testFile<<num;
+? showState(testFile);//第1次测试
+? testFile.close();
+? testFile.open(“stuff.dat”,ios::in);
+? if(testFile.fail())
+? {
+? cout<<”打开失败\n”；
+? exit(0);
+? }
+? testFile>>num;
+? showState(testFile);//第2次测试
+? test>>num;
+? showState(testFile);//第3次测试
+? testFile.close();
+}
+
+? void showState(fstream &file)
+? {
+? cout<<”当前文件的状态为：\n”;
+? cout<<”eof bit:”<< file.eof()<<” ”;
+? cout<<”fail bit:”<<file.fail()<<” ”;
+? cout<<”bad bit:”<<file.bad()<<” ”;
+? cout<<”good bit:”<<file.good()<<endl;
+? file.clear();//清除出错标记位
+? }
+```
+  
+
+### 4.4 多文件操作
+
+* **实例**
+```cpp
+? #include<iostream>
+? using namespace std;
+? #include<fstream>
+? int main()
+? {
+? ifstream inFile;
+? ofstream outFile(“out.txt”);
+? char fileName[81],ch,ch2;
+? cout<<”请输入文件名：”；
+? cin>>fileName;
+? inFile.open(fileName);
+? if(!inFile)
+? {
+  ? cout<<”打开失败”<<fileName<<endl;
+  ? exit(0);
+? }
+while(!inFile.eof) 
+? { 
+  ? inFile.get(ch); 
+  ? if(inFile.fail()) 
+  ? break; 
+  ? ch2=toupper(ch); 
+  ? outFile.put(ch2); 
+? } 
+? inFile.close(); 
+? outFile.close(); 
+? }
+```
+### 4.5 操作简单二进制文件
+
+* **二进制文件**
+
+  二进制文件是按照在内存中存储的形式存储，不是按照ASCII纯文本方式存储，文件中
+  存储的数据是非格式化的。
+
+#### 以二进制打开文件
+```cpp
+file.open("stuff.dat",ios::out|ios::binary);//缺少binary则以文本打开
+```
+#### 二进制文件的读写函数（仅如下两个）、
+```cpp
+file.write((char *)buffer,sizeof(buffer));
+file.write((char *)buffer,sizeof(buffer));
+```
+**实例**
+```cpp
+? void main()
+? {
+  ? fstream file;
+  ? int buffer[10] = {1,2,3,4,5,6,7,8,9,10};
+  ? file.open("a1.txt", ios::out | ios::binary);// 创建一个二进制文件
+  ? file. write ((char*)biffer,sizeof (buffer));
+  ? file.close();
+  ? file.open("a1.txt", ios::in|ios::binary);
+  ? file.read ((char*)buffer; sizeof(buffer));
+  ? fdr(int count = 0; count < 10; count++)
+  ? cout<<setw(6)<<buffer [count];
+  ? file.close();
+  ? ffle.open(“a2.txt”, ios::out); // 创建文本文件
+  ? for(int i = 0; i < 10; i++)
+    ? file<<buffer[i];
+  ? file.close();
+? }
+```
+
+### 4.6 读写结构体文件
+
+* 读写结构体记录
+
+  结构体数据可以采用定长块存储到文件中
+
+  因为结构体中可以包含不同类型的数据，所以当打开这种类型文件时，必须以二进制方式
+打开
+
+* **实例**
+  ```cpp
+  #include <iostream>
+  using namespace std;
+  #include <fstream>
+  #include <cstdlib>
+  #include <cctype>
+  struct Info
+  {
+  char name[21];
+  int a age ；
+  char address [51];
+  char phone[14];
+  char email[51];
+  }；
+
+  int main()
+  {
+    fstream people("people.dat",ios::out|ios::binary);
+    Info person;
+    char again;
+    if(people.fail())
+    {
+      cout<<"打开文件people.dat出错! \n";
+      exit(0);
+    }
+
+    do
+    {
+      ? cout<< ”请输入数据:\n” ；
+      ? cout<<"姓名:"; cin.getline(person.naine, 21);
+      ? cout<<"年龄:"; cin>>person.age;
+      ? cin.ignore(); // 略过换行符,why?
+      ? cout<<"联系地址:";cin.getline(person.address, 51);
+      ? cout<<"联系电话:";cin.getline(person.phone, 14);
+      ? cout<<"E-mail:" ; cin.getline(person.email, 51);
+      ? people.write(( char *)&person, sizeof(person));
+      ? cout<<"还要再输入一个同学的数据吗？";
+      ? cin>>again;
+    }
+
+    while(toupper(again)='Y')
+    {
+      people.close();
+    }
+  }
+  ```
+
+### 4.7 随机访问文件
+
+* **seekp 和 seekg函数**：
+  
+  seekp 函数用于输出文件（写，put）
+
+  seekg 函数用于输入文件（读，get）
+  ```cpp
+  file.seekp(20L,ios::beg);//把file对象相对于文件头向后偏移20个字节
+
+  //文件随机访问模式
+  ios::beg;//从文件头开始计算偏移量
+  ios::end;//从文件尾开始计算偏移量
+  ios::cur;//从当前位置开始计算偏移量
+  ```
+* **seek实例**:
+  ```cpp
+  #include<iostream>
+  #include<fstream>
+  #include<cstdlib>
+  using namespcae std;
+
+  int main()
+  {
+    fstream file("digit.txt",ios::in);//假设内容是1234567890
+    char ch;
+    if(!file) exit(0);
+    file.seekg (1L, ios::beg );//调整到2位置
+    file.get(ch); cout<<ch << endl;
+    file.seekg(-3L, ios::end );//调整到8位置
+    file.get(ch); cout<< ch << endl;//自动后移
+    file.seekg(1L, ios::cur );//偏移到0
+    file.get(ch); cout<< ch << endl;
+    file.close();
+  }
+  ```
+* **tellp 和 tellg 函数**:
+  
+  tellp用于返回写位置
+
+  tellg用于返回读位置
+
+* **tell实例**:
+  ```cpp
+  #include <iostream>
+  using namespace std;
+  #include <fctream>
+  #include <cstdlib>
+  #include <cctype>
+  int main()
+  {
+    fstream file(“digit.txt”,ios::in);//假设内容是1234567890
+    long offset;
+    char ch, again;
+    if(!ffle)
+    {
+      exit(0);
+    }
+     do
+    {
+      cout<<”当前位置为:”<< file.tellg( )<<endl; 
+      cout<<”输入一个偏移量:”； 
+      cin>>offset; 
+      file.seekg (offset, ios::beg); 
+      file.get(ch); 
+      cout<<"当前字符是:"<< ch; 
+      cout<<”\n是否继续?”； 
+      cin>>again; 
+    } 
+    while(toupper(again) = ‘Y’);
+    file.close();
+  }
+  ```
+
 ---
 
 ## <span id="5">5 类的基础部分</span>
