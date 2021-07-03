@@ -48,7 +48,7 @@
   <pre name = "code" class = "c++">
   char src[80] = {"I am a student"};
   char dst[80];
-  strncpy(dst,. src);
+  strncpy(dst, src);
   dst[10] = '\0';
   </pre>
   注意：必须加上'\0'字符串结束标志
@@ -642,7 +642,7 @@
     typedef float REAL;
     </pre>
 
-### 3.4 链表的建立
+### 3.4 链表
 
 * 链表的引入
 
@@ -651,7 +651,182 @@
   * 实际应用无法确定数组的大小
   * 定义足够大————空间浪费
 
+* 链表的结构
+  <pre name = "code" class = "c++">
+  struct student {
+    int ID;
+    char name[20];
+    student* next; //链表与结构体的区别
+  };
+  </pre>
+
 * 单向链表
+  
+  带有头节点的单向链表
+
+  不带头节点的单向链表
+
+* 链表的应用示例
+  <pre name = "code" class = "c++">
+  #include "stdafx.h"
+  #include <iostream>
+  #include <iomanip>
+  using namespace std;
+  typedef struct node
+  {
+	  int data;
+	  node *next;
+  } NODE;
+  NODE* initlist()
+  {
+      NODE *head;
+      head = new NODE;
+	  head->next = NULL;
+	  return head;
+  }
+  
+  NODE *create()
+  {
+	  NODE *p1, *p2, *head;
+	  int a;
+	  p2 = head = initlist();
+	  cin >> a;
+	  while ((a!=-1))
+	  {
+		  p1 = new NODE;
+		  p1 -> data = a;
+		  p2 -> next = p1;
+		  p2 - p1;
+		  cin >> a;
+	  }
+	  p2->next = NULL;
+	  return(head);
+  }
+  void print(NODE* head)
+  {
+	  NODE *p;
+	  p = head->next;
+	  if (p != NULL)
+	  {
+		  cout << "Output list : ";
+		  while (p != NULL)
+		  {
+			  cout << setw(5) << p->data;
+			  p = p->next;
+		  }
+		  cout << "\n";
+	  }
+  }
+  NODE* search(NODE* head, int x)
+  {
+	  NODE *p;
+	  p = head->next;
+	  while (p != NULL)
+	  {
+		  if (p->data == x)
+			  return p;
+		  p = p->next;
+	  }
+	  return NULL;
+  }
+  NODE *insert(NODE *head, NODE *s)
+  {
+	  NODE* p;
+	  p = head;
+	  while (p->next != NULL&&p->next->data < s->data)
+		  p = p->next;
+	  s->next = p->next;
+	  p->next = s;
+	  return head;
+  }
+  NODE *create_sort()
+  {
+	  NODE* p, *head = NULL;
+	  int a;
+	  head = initlist();
+	  cin >> a;
+	  while (a != 1)
+	  {
+		  p = new NODE;
+		  p->data = a;
+		  head = insert(head, p);
+		  cin >> a;
+	  }
+	  return head;
+  }
+  NODE *delete_one_node(NODE *head, int num)
+  {
+	  NODE* p, *temp;
+	  p = head;
+	  while (p->next != NULL&&p->next ->data!=num)
+		  p = p->next;
+	  temp = p->next;
+	  if (p->next != NULL)
+	  {
+		  p->next = temp->next;
+		  delete temp;
+	  }
+	  else cout << "NOT found";
+	  return head;
+  }
+  void free_list(NODE *head)
+  {
+	  NODE *p;
+	  while (head)
+	  {
+		  p = head;
+		  head = head->next;
+		  delete p;
+	  }
+  }
+  
+  int main()
+  {
+	  //return 1;
+	  NODE *st, *head = NULL;
+	  int num; char c;
+	  cout << "\n creat a list:\n";
+	  head = initlist();
+	  while (1)
+	  {
+		  cout << "\n\t D:Delete I:Insert P: Print S:Search E: Exit\n";
+		  cin >> c;
+		  switch (toupper(c))
+		  {
+		  case'I':
+			  st = new NODE;
+			  cout << "please input a number to be inserted:";
+			  cin >> st->data;
+			  insert(head, st);
+			  break;
+		  case 'D':
+			  cout << "please input a number to be deleted:";
+			  cin >> num;
+			  delete_one_node(head, num);
+			  break;
+		  case 'S':
+			  cout << "please input a number to be search:";
+			  cin >> num;
+			  if (search(head, num) != NULL)
+			  {
+				  cout << "it is in the list. \n";
+			  }
+			  else
+				  cout << "It is not in the list. \n";
+			  break;
+		  case 'P':
+		  	print(head);
+			  break;
+		  case 'E':
+			  free_list(head);
+			  exit(0);
+		  default:
+			  break;
+		  }
+	  }
+	  return 0;
+  }
+  </pre>
 
 ---
 
@@ -672,6 +847,8 @@
 ---
 
 ## <span id="8">8 异常处理</span>
+
+* 
 
 ---
 
