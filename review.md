@@ -249,7 +249,7 @@
   string test1;    //空串
   string test2 = "内容"; //使用=
   string test3("内容");   //使用引用字符数组作为参数传给构造函数
-  string test4(test2); //用一个string初始化另一而string
+  string test4(test2); //用一个string初始化另一个string
   string test5(test2,pos,num); //从test2中的第pos个位置开始，拷贝个数为num个字符
   string test6 = test2 + "内容" + test3 //混合初始化
   string test7 = test2.substr(pos,num); //从test2中的第pos个位置开始，拷贝个数为num个字符
