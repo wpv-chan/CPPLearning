@@ -1161,30 +1161,30 @@ int main()
   cout<<”向文件中写数据!\n”;
 
   testFile<<num;
-? showState(testFile);//第1次测试
-? testFile.close();
-? testFile.open(“stuff.dat”,ios::in);
-? if(testFile.fail())
-? {
-? cout<<”打开失败\n”；
-? exit(0);
-? }
-? testFile>>num;
-? showState(testFile);//第2次测试
-? test>>num;
-? showState(testFile);//第3次测试
-? testFile.close();
+ showState(testFile);//第1次测试
+ testFile.close();
+ testFile.open(“stuff.dat”,ios::in);
+ if(testFile.fail())
+ {
+ cout<<”打开失败\n”；
+ exit(0);
+ }
+ testFile>>num;
+ showState(testFile);//第2次测试
+ test>>num;
+ showState(testFile);//第3次测试
+ testFile.close();
 }
 
-? void showState(fstream &file)
-? {
-? cout<<”当前文件的状态为：\n”;
-? cout<<”eof bit:”<< file.eof()<<” ”;
-? cout<<”fail bit:”<<file.fail()<<” ”;
-? cout<<”bad bit:”<<file.bad()<<” ”;
-? cout<<”good bit:”<<file.good()<<endl;
-? file.clear();//清除出错标记位
-? }
+ void showState(fstream &file)
+ {
+ cout<<”当前文件的状态为：\n”;
+ cout<<”eof bit:”<< file.eof()<<” ”;
+ cout<<”fail bit:”<<file.fail()<<” ”;
+ cout<<”bad bit:”<<file.bad()<<” ”;
+ cout<<”good bit:”<<file.good()<<endl;
+ file.clear();//清除出错标记位
+}
 ```
   
 
@@ -1192,33 +1192,33 @@ int main()
 
 * **实例**
 ```cpp
-? #include<iostream>
-? using namespace std;
-? #include<fstream>
-? int main()
-? {
-? ifstream inFile;
-? ofstream outFile(“out.txt”);
-? char fileName[81],ch,ch2;
-? cout<<”请输入文件名：”；
-? cin>>fileName;
-? inFile.open(fileName);
-? if(!inFile)
-? {
-  ? cout<<”打开失败”<<fileName<<endl;
-  ? exit(0);
-? }
+#include<iostream>
+ using namespace std;
+ #include<fstream>
+ int main()
+ {
+ ifstream inFile;
+ ofstream outFile(“out.txt”);
+ char fileName[81],ch,ch2;
+ cout<<”请输入文件名：”；
+ cin>>fileName;
+inFile.open(fileName);
+if(!inFile)
+{
+   cout<<”打开失败”<<fileName<<endl;
+   exit(0);
+ }
 while(!inFile.eof) 
-? { 
-  ? inFile.get(ch); 
-  ? if(inFile.fail()) 
-  ? break; 
-  ? ch2=toupper(ch); 
-  ? outFile.put(ch2); 
-? } 
-? inFile.close(); 
-? outFile.close(); 
-? }
+ { 
+   inFile.get(ch); 
+  if(inFile.fail()) 
+  break; 
+  ch2=toupper(ch); 
+  outFile.put(ch2); 
+} 
+inFile.close(); 
+outFile.close(); 
+ }
 ```
 ### 4.5 操作简单二进制文件
 
@@ -1233,28 +1233,28 @@ file.open("stuff.dat",ios::out|ios::binary);//缺少binary则以文本打开
 ```
 #### 二进制文件的读写函数（仅如下两个）、
 ```cpp
-file.write((char *)buffer,sizeof(buffer));
+file.read((char *)buffer,sizeof(buffer));
 file.write((char *)buffer,sizeof(buffer));
 ```
 **实例**
 ```cpp
-? void main()
-? {
-  ? fstream file;
-  ? int buffer[10] = {1,2,3,4,5,6,7,8,9,10};
-  ? file.open("a1.txt", ios::out | ios::binary);// 创建一个二进制文件
-  ? file. write ((char*)biffer,sizeof (buffer));
-  ? file.close();
-  ? file.open("a1.txt", ios::in|ios::binary);
-  ? file.read ((char*)buffer; sizeof(buffer));
-  ? fdr(int count = 0; count < 10; count++)
-  ? cout<<setw(6)<<buffer [count];
-  ? file.close();
-  ? ffle.open(“a2.txt”, ios::out); // 创建文本文件
-  ? for(int i = 0; i < 10; i++)
-    ? file<<buffer[i];
-  ? file.close();
-? }
+ void main()
+ {
+   fstream file;
+  int buffer[10] = {1,2,3,4,5,6,7,8,9,10};
+  file.open("a1.txt", ios::out | ios::binary);// 创建一个二进制文件
+  file. write ((char*)biffer,sizeof (buffer));
+   file.close();
+   file.open("a1.txt", ios::in|ios::binary);
+   file.read ((char*)buffer; sizeof(buffer));
+   fdr(int count = 0; count < 10; count++)
+   cout<<setw(6)<<buffer [count];
+   file.close();
+   ffle.open(“a2.txt”, ios::out); // 创建文本文件
+   for(int i = 0; i < 10; i++)
+     file<<buffer[i];
+   file.close();
+ }
 ```
 
 ### 4.6 读写结构体文件
@@ -1295,16 +1295,16 @@ file.write((char *)buffer,sizeof(buffer));
 
     do
     {
-      ? cout<< ”请输入数据:\n” ；
-      ? cout<<"姓名:"; cin.getline(person.naine, 21);
-      ? cout<<"年龄:"; cin>>person.age;
-      ? cin.ignore(); // 略过换行符,why?
-      ? cout<<"联系地址:";cin.getline(person.address, 51);
-      ? cout<<"联系电话:";cin.getline(person.phone, 14);
-      ? cout<<"E-mail:" ; cin.getline(person.email, 51);
-      ? people.write(( char *)&person, sizeof(person));
-      ? cout<<"还要再输入一个同学的数据吗？";
-      ? cin>>again;
+       cout<< ”请输入数据:\n” ；
+       cout<<"姓名:"; cin.getline(person.naine, 21);
+       cout<<"年龄:"; cin>>person.age;
+       cin.ignore(); // 略过换行符,why?
+       cout<<"联系地址:";cin.getline(person.address, 51);
+       cout<<"联系电话:";cin.getline(person.phone, 14);
+       cout<<"E-mail:" ; cin.getline(person.email, 51);
+       people.write(( char *)&person, sizeof(person));
+       cout<<"还要再输入一个同学的数据吗？";
+       cin>>again;
     }
 
     while(toupper(again)='Y')
