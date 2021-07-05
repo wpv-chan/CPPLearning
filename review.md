@@ -2843,6 +2843,10 @@ void main()
 
     双向链表，元素在内存不能连续存放，在任何位置增删元素都能在常数时间完成，不支持随机存取
 
+  * array
+
+  * forward_list （C++ 11中介绍）
+
 * 关联容器
 
   * 元素是排序的，插入任何元素，都应按相应的排列规则来确定位置，因此具有较好的性能
@@ -2856,6 +2860,8 @@ void main()
   * map/multimap
   
     map与set的不同之处在于map中存放的元素有且仅有两个，第一个是first，另一个是second，并且根据first的值来进行排序和检索，multimap中则允许相同的first元素
+
+  * 在关联容器前加上 unordered_ 则是非排序（C++ 11中介绍）
 
 * 容器适配器
 
@@ -2962,6 +2968,39 @@ void main()
   * 随机访问迭代器可以通过 v[i] 来访问成员
 
 ### 9.4 算法
+
+#### 更多内容参考：https://www.geeksforgeeks.org/algorithms-library-c-stl/
+
+* 两个重要算法
+
+  * sort 排序
+
+    ```cpp
+    sort(startaddress, endaddress)
+
+    startaddress: the address of the first element of the array
+
+    endaddress: the address of the next contiguous location of the last element of the array.
+
+    So actually sort() sorts in the range of [startaddress,endaddress)
+    ```
+
+  * binary_search
+  
+    主要思想是将数组一分为二（分而治之），直到找到元素，或者所有元素都用完为止。
+    ```cpp
+    binary_search(startaddress, 
+              endaddress, valuetofind)
+    Parameters :
+    startaddress: the address of the first 
+                  element of the array.
+    endaddress: the address of the next contiguous 
+                location of the last element of the array.
+    valuetofind: the target value which we have 
+                 to search for.
+    Returns :
+    true if an element equal to valuetofind is found, else false.
+    ```
 
 
 
