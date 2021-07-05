@@ -1275,52 +1275,50 @@ file.write((char *)buffer,sizeof(buffer));
   #include <cctype>
   struct Info
   {
-  char name[21];
-  int age ；
-  char address [51];
-  char phone[14];
-  char email[51];
-  }；
+    char name[21];
+    int age;
+    char address[51];
+    char phone[14];
+    char email[51];
+  };
 
   int main()
   {
-    fstream people("people.dat",ios::out|ios::binary);
+    fstream people("people.dat", ios::out | ios::binary);
     Info person;
     char again;
-    if(people.fail())
+    if (people.fail())
     {
-      cout<<"打开文件people.dat出错! \n";
-      exit(0);
+        cout << "打开文件people.dat出错! \n";
+        exit(0);
     }
 
     do
     {
-       cout<< ”请输入数据:\n” ；
-       cout<<"姓名:"; cin.getline(person.naine, 21);
-       cout<<"年龄:"; cin>>person.age;
-       cin.ignore(); // 略过换行符,why?
-       cout<<"联系地址:";cin.getline(person.address, 51);
-       cout<<"联系电话:";cin.getline(person.phone, 14);
-       cout<<"E-mail:" ; cin.getline(person.email, 51);
-       people.write(( char *)&person, sizeof(person));
-       cout<<"还要再输入一个同学的数据吗？";
-       cin>>again;
+        cout << "请输入数据:\n";
+        cout << "姓名:"; cin.getline(person.name, 21);
+        cout << "年龄:"; cin >> person.age;
+        cin.ignore(); // 略过换行符,why?
+        cout << "联系地址:"; cin.getline(person.address, 51);
+        cout << "联系电话:"; cin.getline(person.phone, 14);
+        cout << "E-mail:"; cin.getline(person.email, 51);
+        people.write((char*)&person, sizeof(person));
+        cout << "还要再输入一个同学的数据吗？";
+        cin >> again;
+    } while (toupper(again) == 'Y');
+    
+    people.close();
+    
+
+    while (!people.eof())
+    {
+        people.read((char*)&person, sizeof(person));
+        if (people.fail())
+        {
+            break;
+        }
     }
 
-    while(toupper(again)='Y')
-    {
-      people.close();
-    }
-    
-    while(!people.eof())
-    {
-    	people.read((char *)&person, sizeof(person));
-	if(people.fail())
-	{
-		break;
-	}
-    }
-    
     people.close();
   }
   ```
