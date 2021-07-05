@@ -1311,6 +1311,17 @@ file.write((char *)buffer,sizeof(buffer));
     {
       people.close();
     }
+    
+    while(!people.eof())
+    {
+    	people.read((char *)&person, sizeof(person));
+	if(people.fail())
+	{
+		break;
+	}
+    }
+    
+    people.close();
   }
   ```
 
