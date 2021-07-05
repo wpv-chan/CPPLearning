@@ -1241,16 +1241,16 @@ file.write((char *)buffer,sizeof(buffer));
  void main()
  {
    fstream file;
-  int buffer[10] = {1,2,3,4,5,6,7,8,9,10};
-  file.open("a1.txt", ios::out | ios::binary);// 创建一个二进制文件
-  file. write ((char*)biffer,sizeof (buffer));
+   int buffer[10] = {1,2,3,4,5,6,7,8,9,10};
+   file.open("a1.txt", ios::out | ios::binary);// 创建一个二进制文件
+   file. write ((char*)buffer,sizeof (buffer));
    file.close();
    file.open("a1.txt", ios::in|ios::binary);
    file.read ((char*)buffer; sizeof(buffer));
-   fdr(int count = 0; count < 10; count++)
+   for(int count = 0; count < 10; count++)
    cout<<setw(6)<<buffer [count];
    file.close();
-   ffle.open(“a2.txt”, ios::out); // 创建文本文件
+   file.open(“a2.txt”, ios::out); // 创建文本文件
    for(int i = 0; i < 10; i++)
      file<<buffer[i];
    file.close();
@@ -1276,7 +1276,7 @@ file.write((char *)buffer,sizeof(buffer));
   struct Info
   {
   char name[21];
-  int a age ；
+  int age ；
   char address [51];
   char phone[14];
   char email[51];
